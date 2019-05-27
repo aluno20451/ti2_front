@@ -38,7 +38,10 @@ export function getComments(id) {
     }
   });
 }
-
+/**
+ * 
+ * @param {Objeto usado para fazer login contém, Username:* e Password:*s} log 
+ */
 export async function login(log) {
 
   let resposta = await fetch(linkApi + "/api/account/login", {

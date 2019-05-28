@@ -29,7 +29,8 @@ class IptGram extends React.Component {
     };
   }
   
-componentDidMount() {
+async componentDidMount() {
+  await logout();
   getPosts("")
     .then((allPosts) => {
       this.setState({posts: allPosts, isLoading:false});

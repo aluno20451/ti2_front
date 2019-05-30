@@ -49,9 +49,24 @@ function listaComments(props){
   let container=[];
   container.push(React.createElement("h3",{key:-1},"Comentários:"));
   for(let i=0; i<props.comments.length;i++){
-    container.push(React.createElement("p",{key:i},props.comments[i].user.name+": "+props.comments[i].text));
+    if(props.comments[i].user.isCurrentUser===false){
+      container.push(
+        React.createElement("p",{key:i},props.comments[i].user.name+": "+props.comments[i].text)
+      ); 
+    }
+    else{
+      container.push(React.createElement("div",null,
+        React.createElement("p",{key:i},props.comments[i].user.name+": "+props.comments[i].text),
+        React.createElement("span",null,"❌")  
+      )); 
+
+    }
   }
-  
+  /*
+  container.push(
+    React.createElement("div")
+    React.createElement("input",{type:"text",id:"commentString"})
+  );*/
   return container;
 }
 

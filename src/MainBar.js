@@ -18,16 +18,14 @@ class MainBar extends React.Component{
           React.createElement("p",null,"Login:"),
           React.createElement("input",{type:"text",id:"loginString"}),
           React.createElement("p",null,"Password:"),
-          React.createElement("input",{type:"text",id:"passString"}),
+          React.createElement("input",{type:"password",id:"passString"}),
           React.createElement("button",{onClick:() => this.props.handleLogin(), 
-            style:{position:"inherit", height:"25px", width:"50px"}},"🤮"),
+            style:{position:"inherit", height:"25px", width:"50px"}},"🌲"),
         
         ),
           
         React.createElement("div",{},
-          React.createElement("input",{type:"text",id:"searchString", style:{position:"inherit", height:"20px"}}),
-          React.createElement("button",{onClick:() => this.props.handleSearch(), 
-            style:{position:"inherit", height:"25px", width:"50px"}},"🔎")
+          React.createElement("input",{onChange:() => this.props.handleSearch(),type:"text",id:"searchString", style:{position:"inherit", height:"20px"}})
         )
       );
     }
@@ -37,14 +35,12 @@ class MainBar extends React.Component{
         React.createElement("div",{style:{display:"flex",alignItems:"center"}},
           
           React.createElement("button",{onClick:() => this.props.handleLogin(), 
-            style:{position:"inherit", height:"25px", width:"50px"}},"🎞"),
+            style:{position:"inherit", height:"25px", width:"50px"}},"🍂"),
         
         ),
           
         React.createElement("div",{},
-          React.createElement("input",{type:"text",id:"searchString", style:{position:"inherit", height:"20px"}}),
-          React.createElement("button",{onClick:() => this.props.handleSearch(), 
-            style:{position:"inherit", height:"25px", width:"50px"}},"🔎")
+          React.createElement("input",{onChange:() => this.props.handleSearch(),type:"text",id:"searchString", style:{position:"inherit", height:"20px"}})
         )
       );
     }

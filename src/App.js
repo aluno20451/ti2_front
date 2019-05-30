@@ -22,8 +22,8 @@ class IptGram extends React.Component {
     super(props);
 
     this.state = {
-      posts:[],
       isLoading:true,
+      posts:[],
       post_details:"",
       userLog:false
     };
@@ -42,7 +42,9 @@ async componentDidMount() {
 
   render(){
     if(this.state.isLoading){
-      return React.createElement(Loader,{type:"Puff", color:"#00BFFF", height:"100", width:"100"}); 
+      return React.createElement("div",{style:{display:"flex", width:"100vw",height:"100vh",alignItems:"center",justifyContent:"center"}},
+        React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
+      );
     }
     else if(this.state.post_details===""){
       return React.createElement("div",null,
@@ -69,7 +71,7 @@ async componentDidMount() {
     });
     getPosts("")
     .then((allPosts) => {
-      this.setState({posts: allPosts, isLoading:false});
+      this.setState({posts: allPosts});
     })
     .catch((erro) => {
       console.error("Erro ao obter as tarefas", erro);
@@ -155,6 +157,11 @@ async componentDidMount() {
 function PostsList(props){
   let listaPosts = [];
   let d = new Date();
+  if(props.posts.length==0){
+    return React.createElement("div",{style:{display:"flex", width:"100vw",height:"100vh",alignItems:"center",justifyContent:"center"}},
+      React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
+   );
+  }
   for(let i=0; i<props.posts.length;i++){
       listaPosts.push(
         React.createElement(PostsItem,{key:d.getTime()+i, post: props.posts[i],

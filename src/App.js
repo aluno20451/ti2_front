@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Loader from 'react-loader-spinner';
-
+import './style.css';
 
 import {getPosts,login,like,logout} from './api.js';
 import PostsItem from './PostsItem.js';
@@ -42,24 +42,28 @@ async componentDidMount() {
 
   render(){
     if(this.state.isLoading){
-      return React.createElement("div",{style:{display:"flex", width:"100vw",height:"100vh",alignItems:"center",justifyContent:"center"}},
+      return React.createElement("div",{ id:"DivLoader"},
         React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
       );
     }
     else if(this.state.post_details===""){
       return React.createElement("div",null,
         React.createElement(MainBar,{logged: this.state.userLog,
-          handleRefresh: () => this.handleRefresh(),handleSearch:() => this.handleSearch(), handleLogin:() => this.handleLogin()
+          handleRefresh: () => this.handleRefresh(),
+          handleSearch:() => this.handleSearch(), 
+          handleLogin:() => this.handleLogin()
         },null),
         React.createElement(PostsList,{posts: this.state.posts,
-          handlePost: (index) => this.handlePost(index), handleLike: (index) => this.handleLike(index)}));
+          handlePost: (index) => this.handlePost(index), 
+          handleLike: (index) => this.handleLike(index)}
+        ));
     }
     else{
       return React.createElement("div",null,
       React.createElement(MainBar,{logged: this.state.userLog,
         handleRefresh: () => this.handleRefresh(), handleSearch:() => this.handleSearch(), handleLogin:() => this.handleLogin()
       },null),
-      React.createElement(PostDetails,{post: this.state.post_details,handleExitDetails: () => this.handleExitDetails()}));
+      React.createElement(PostDetails,{post: this.state.post_details,isLogged: this.state.userLog,handleExitDetails: () => this.handleExitDetails()}));
 
     }
   }
@@ -151,14 +155,21 @@ async componentDidMount() {
 
   handleExitDetails(){
     this.setState({post_details: ""});
+    getPosts("")
+    .then((allPosts) => {
+      this.setState({posts: allPosts});
+    })
+    .catch((erro) => {
+      console.error("Erro ao obter as tarefas", erro);
+    });
   }
 }
 
 function PostsList(props){
   let listaPosts = [];
   let d = new Date();
-  if(props.posts.length==0){
-    return React.createElement("div",{style:{display:"flex", width:"100vw",height:"100vh",alignItems:"center",justifyContent:"center"}},
+  if(props.posts.length===0){
+    return React.createElement("div",{id:"DivLoader"},
       React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
    );
   }

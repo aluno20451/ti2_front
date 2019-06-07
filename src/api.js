@@ -1,10 +1,10 @@
-let linkApi = "";
+//import console = require("console");
 
 /**
  * Retorna os posts em formato json, odernados pela data
  */
 export function getPosts(string){
-  return fetch(linkApi + "/api/posts?query="+string, {
+  return fetch("/api/posts?query="+string, {
     method: "GET",
     headers: {
       //Quero json
@@ -24,7 +24,7 @@ export function getPosts(string){
  * @param {Id do post do qual queremos os comentários} id 
  */
 export function getComments(id) {
-  return fetch(linkApi + "/api/posts/"+id+"/comments", {
+  return fetch("/api/posts/"+id+"/comments", {
     method: "GET",
     headers: {
       //Quero json
@@ -44,7 +44,7 @@ export function getComments(id) {
  */
 export async function login(log) {
 
-  let resposta = await fetch(linkApi + "/api/account/login", {
+  let resposta = await fetch("/api/account/login", {
     method: "POST",
     headers: {
       //enviar json
@@ -64,7 +64,7 @@ export async function login(log) {
 }
 export async function logout() {
 
-  let resposta = await fetch(linkApi + "/api/account/logout", {
+  let resposta = await fetch("/api/account/logout", {
     method: "POST",
     headers: {
       //enviar json
@@ -78,7 +78,7 @@ export async function logout() {
 
 export async function like(id) {
   
-  let resposta = await fetch(linkApi + "/api/posts/"+id+"/like", {
+  let resposta = await fetch("/api/posts/"+id+"/like", {
     method: "POST",
     headers: {
       //enviar json
@@ -96,6 +96,47 @@ export async function like(id) {
   return resposta;
 }
 
+export async function postComment(content) {
+  
+  let resposta = await fetch("/api/comments", {
+    method: "POST",
+    headers: {
+      //enviar json
+      "Content-Type": "application/json",
+      //quero json
+      Accept: "application/json",
+    },
+    body:JSON.stringify(content)
+  }).then((resposta) => {
+    if (resposta.status === 201) {
+      return resposta.json();
+    } else {
+      return Promise.reject(resposta);
+    }
+  });
+  return resposta;
+}
+
+export async function deleteComment(id) {
+  
+  let resposta = await fetch("/api/comments/"+id, {
+    method: "Delete",
+    headers: {
+      //enviar json
+      "Content-Type": "application/json",
+      //quero json
+      Accept: "application/json"
+    },
+  }).then((resposta) => {
+    if (resposta.status === 204) {
+      return resposta
+    } else {
+      return Promise.reject(resposta);
+    }
+  });
+  return resposta;
+}
+
   //Manda imagem
   export async function postAdd(imagem, descricao) {
   let fd = new FormData();
@@ -103,10 +144,9 @@ export async function like(id) {
   fd.append("image", imagem);
   fd.append("metadata", JSON.stringify({caption:descricao}));
   
-  let resposta = await fetch(linkApi + "/api/account/login", {
+  let resposta = await fetch("/api/account/login", {
     method: "POST",
     headers: {
-      //enviar json
       //quero json
       Accept: "application/json"
     },

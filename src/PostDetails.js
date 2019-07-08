@@ -96,7 +96,7 @@ function listaComments(props){
     }
     else{
       container.push(React.createElement("div",{key:i},
-        React.createElement("p",null,props.comments[i].user.name+": "+props.comments[i].text),
+        React.createElement("span",null,props.comments[i].user.name+": "+props.comments[i].text),
         React.createElement("span",{onClick:() => props.handleDeleteComment(props.comments[i].id)},"❌")  
       )); 
     }
@@ -105,7 +105,7 @@ function listaComments(props){
   
   if(props.isLogged){
     container.push(
-      React.createElement("div",{key: lastCommentIndex+1},
+      React.createElement("div",{id:"commentDiv",key: lastCommentIndex+1},
         React.createElement("input",{id:"commentText",type:"text"}),
         React.createElement("button",{id:"commentBtn", style:{position:"inherit",height:"25px",width:"50px"},onClick: () => props.handlePostComments()})
       )

@@ -8,14 +8,7 @@ import PostsItem from './PostsItem.js';
 import PostDetails from './PostDetails.js';
 import MainBar from './MainBar.js';
 
-/**
- * {
-    "UserName": "aluno20451",
-    "Name": "João Silva",
-    "Password": "58e5aab4",
-    "Id": "a365ad91-df6b-4bbb-83cd-6a5d3a5df329"
-  }
- */
+
 class IptGram extends React.Component {
   constructor(props) {
     //A invocação do construtor 'super'
@@ -28,7 +21,13 @@ class IptGram extends React.Component {
       userLog:false
     };
   }
-  
+
+/* 
+Executado sempre que a aplicação é aberta pela primeira vez, 
+vai tentar fazer logout para não ser possivel a um user fazer login por um outro user se ter esquecido de sair da sua sessao.
+Gera um erro caso ninguém tivesse feito login anteriormente, deixei ficar pois não afeta o programa em geral
+Vai também buscar pela primeira vez os posts à API disponibilizada.
+*/
 async componentDidMount() {
   await logout();
   getPosts("")
@@ -40,12 +39,19 @@ async componentDidMount() {
     });
 }
 
+  /*Pode returnar 3 coisas:
+    1- Se uma atualização estiver a ser feita aos posts retorna uma janela de loading
+    2- Mostra todos os posts existentes no state
+    3- Mostra um post escolhido pelo utilizador
+  */
   render(){
+    // 1
     if(this.state.isLoading){
       return React.createElement("div",{ id:"DivLoader"},
         React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
       );
     }
+    // 2
     else if(this.state.post_details===""){
       return React.createElement("div",null,
         React.createElement(MainBar,{logged: this.state.userLog,
@@ -58,30 +64,37 @@ async componentDidMount() {
           handleLike: (index) => this.handleLike(index)}
         ));
     }
+    // 3
     else{
       return React.createElement("div",null,
       React.createElement(MainBar,{logged: this.state.userLog,
         handleRefresh: () => this.handleRefresh(), handleSearch:() => this.handleSearch(), handleLogin:() => this.handleLogin()
       },null),
-      React.createElement(PostDetails,{post: this.state.post_details,isLogged: this.state.userLog,handleExitDetails: () => this.handleExitDetails()}));
+      React.createElement(PostDetails,{post: this.state.post_details,isLogged: this.state.userLog,
+        handleExitDetails: () => this.handleExitDetails(),
+        handleLike: (index) => this.handleLike(index)
+      }));
 
     }
   }
-
+  // Faz like e atualiza o state, como o state é atualizado o post "liked" vai ser mostrado como tal
   async handleLike(index){
-    await like(index)
-    .then((resposta) => {
-      console.log(resposta);
-    });
-    getPosts("")
-    .then((allPosts) => {
-      this.setState({posts: allPosts});
-    })
-    .catch((erro) => {
-      console.error("Erro ao obter as tarefas", erro);
-    });
+    if(this.state.userLog){
+      await like(index)
+      .then((resposta) => {
+      });
+      
+      getPosts("")
+      .then((allPosts) => {
+        this.setState({posts: allPosts});
+      })
+      .catch((erro) => {
+        console.error("Erro ao obter as tarefas", erro);
+      });
+    } 
   }
 
+  // Faz o login se o utilizador na aplicação não estiver logged in, se estiver faz logout
   handleLogin(){
     if(!this.state.userLog){
       
@@ -95,11 +108,9 @@ async componentDidMount() {
 
       login(log)
         .then((resposta) => {
-          console.log("Esta a fazer login");
           this.setState({userLog:true});
           getPosts("")
             .then((allPosts) => {
-              console.log(allPosts);
               this.setState({posts: allPosts});
             })
             .catch((erro) => {
@@ -115,7 +126,6 @@ async componentDidMount() {
         this.setState({userLog:false});
         getPosts("")
           .then((allPosts) => {
-            console.log(allPosts);
             this.setState({posts: allPosts});
           })
           .catch((erro) => {
@@ -125,6 +135,7 @@ async componentDidMount() {
     }
   }
 
+// Pesquisa posts por um termo que é adquirido da caixa com id "searchString"
   handleSearch(){
     let texto = document.getElementById("searchString").value;
     
@@ -137,7 +148,8 @@ async componentDidMount() {
     });
   }
 
-  handleRefresh(){
+  // Busca os posts à API
+  async handleRefresh(){
     getPosts("")
     .then((allPosts) => {
       this.setState({posts: allPosts});
@@ -147,12 +159,12 @@ async componentDidMount() {
     });
   }
   
+  // Guarda no state o indice em que o post escolhido se encontra no array do state, vai gerar uma nova view
   handlePost(index){
     let post = this.state.posts[index];
-    this.setState({post_details:post});
+      this.setState({post_details:post});
   }
-
-
+  // Retira do state o indice do post escolhido no array, retornado à view com todos os posts
   handleExitDetails(){
     this.setState({post_details: ""});
     getPosts("")
@@ -165,14 +177,20 @@ async componentDidMount() {
   }
 }
 
+// Função utilizada para mostrar todos os posts, relativamente ao render é usada na opcção 2
 function PostsList(props){
   let listaPosts = [];
   let d = new Date();
+  // Caso um post esteja a ser procurado por um tema específico, e o post não exista mostra a animação de que está a carregar
   if(props.posts.length===0){
     return React.createElement("div",{id:"DivLoader"},
       React.createElement(Loader, {type:"Puff", color:"#99FF95", height:"100px", width:"100px"})  
    );
   }
+
+  /* Usa os posts que recebe por parâmetro para gerar um Array de PostsItem que vai ser de seguida mostrado num div
+    É de notar que o indice do array e não do post vai ser utilizado na função handlePost para selecionar o post que vai ser mostrado na view dos detalhes
+  */
   for(let i=0; i<props.posts.length;i++){
       listaPosts.push(
         React.createElement(PostsItem,{key:d.getTime()+i, post: props.posts[i],

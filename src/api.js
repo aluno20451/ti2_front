@@ -1,7 +1,8 @@
 //import console = require("console");
 
 /**
- * Retorna os posts em formato json, odernados pela data
+ * Retorna os posts em formato json, odernados pela data, é opcional dar a string para procurar um post com um termo específico
+ * @param {String usada na pesquisa} string
  */
 export function getPosts(string){
   return fetch("/api/posts?query="+string, {
@@ -39,7 +40,7 @@ export function getComments(id) {
   });
 }
 /**
- * 
+ * Faz o login dado o objeto log
  * @param {Objeto usado para fazer login contém, Username:* e Password:*s} log 
  */
 export async function login(log) {
@@ -62,6 +63,10 @@ export async function login(log) {
   });
   return resposta;
 }
+/**
+ * 
+ * Faz o logout
+ */
 export async function logout() {
 
   let resposta = await fetch("/api/account/logout", {
@@ -75,7 +80,10 @@ export async function logout() {
   });
   return resposta;
 }
-
+/**
+ * Faz like dado o id do Post
+ * @param {int} id 
+ */
 export async function like(id) {
   
   let resposta = await fetch("/api/posts/"+id+"/like", {
@@ -96,6 +104,10 @@ export async function like(id) {
   return resposta;
 }
 
+/**
+ * Faz o login dado o objeto log
+ * @param {Objeto usado para postar comentários contém, postId:* e text:*s} content 
+ */
 export async function postComment(content) {
   
   let resposta = await fetch("/api/comments", {
@@ -117,6 +129,10 @@ export async function postComment(content) {
   return resposta;
 }
 
+/**
+ * Apaga o comentário dado o seu id
+ * @param {id do comentário} id 
+ */
 export async function deleteComment(id) {
   
   let resposta = await fetch("/api/comments/"+id, {
@@ -137,7 +153,7 @@ export async function deleteComment(id) {
   return resposta;
 }
 
-  //Manda imagem
+  //Manda imagem, NÃO IMPLEMENTADO POR FALTA DE TEMPO RIP
   export async function postAdd(imagem, descricao) {
   let fd = new FormData();
   

@@ -1,6 +1,6 @@
 {
-  "proxy":"https://ipt-ti2-iptgram.azurewebsites.net",
-  "name": "ti2_proj", 
+  "proxy": "https://ipt-ti2-iptgram.azurewebsites.net",
+  "name": "ti2_proj",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

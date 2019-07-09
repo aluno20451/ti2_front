@@ -1,6 +1,8 @@
 import React from 'react';
 import logo from './images/alumni.png';
 import './style.css';
+
+// Esta classe tem três objetivos: ser usada pra ser realizado o login, fazer logout e pesquisa de posts por uma string escrita no input com id "searchString"
 class MainBar extends React.Component{
   /*constructor(props) {
     //A invocação do construtor 'super'

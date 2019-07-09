@@ -1,3 +1,7 @@
+/*
+  O estilo foi a parte mais seca de se fazer, e o pouco que está feito foi com a ajuda do Ricardo Arede, por favor nao me faça perguntas sobre isto
+*/
+
 /* Estilo para a classe MainBar.js */
 #DivLoader{
   display:flex;
@@ -56,7 +60,7 @@
 /* Estilo para PostsItem.js */
 .PostsDiv{
   background-color:#99FF95 ;
-  height:330px;
+  height:350px;
   width:200px;
   border:2px solid #99FF95;
   margin:10px;
